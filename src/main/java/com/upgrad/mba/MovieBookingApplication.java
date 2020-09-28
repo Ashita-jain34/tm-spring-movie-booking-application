@@ -1,6 +1,8 @@
 package com.upgrad.mba;
 
+import com.upgrad.mba.dao.CityDao;
 import com.upgrad.mba.dao.CustomerDao;
+import com.upgrad.mba.entities.City;
 import com.upgrad.mba.entities.Customer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,28 +15,24 @@ public class MovieBookingApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
-		CustomerDao customerDao = context.getBean(CustomerDao.class);
-		Customer customer = new Customer();
-		customer.setFirstName("Emma");
-		customer.setLastName("Stone");
-		customer.setUsername("emma123stone");
-		customer.setPassword("emma@amme");
-		customer.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
+		CityDao cityDao = context.getBean(CityDao.class);
+		City city = new City();
+		city.setCityName("Delhi");
 
-		System.out.println("Before Saving: " + customer);
+		System.out.println("Before Saving: " + city);
 
-		Customer savedCustomer = customerDao.save(customer);
-		System.out.println("After saving: " + savedCustomer);
+		City savedCity = cityDao.save(city);
+		System.out.println("After saving: " + savedCity);
 
-		Customer retrievedCustomer = customerDao.findById(savedCustomer.getCustomerId());
-		System.out.println("After retrieving: " + retrievedCustomer);
+		City retrievedCity = cityDao.findById(savedCity.getCityId());
+		System.out.println("After retrieving: " + retrievedCity);
 
-		customer.setUsername("emmastone123");
-		Customer updatedCustomer = customerDao.update(customer);
-		System.out.println("After updating: " + updatedCustomer);
+		city.setCityName("Mumbai");
+		City updatedCity = cityDao.update(city);
+		System.out.println("After updating: " + updatedCity);
 
-		customerDao.delete(updatedCustomer);
-		System.out.println("After deleting: " + customerDao.findById(updatedCustomer.getCustomerId()));
+		cityDao.delete(updatedCity);
+		System.out.println("After deleting: " + cityDao.findById(updatedCity.getCityId()));
 	}
 
 }
