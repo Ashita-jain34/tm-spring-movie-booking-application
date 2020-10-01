@@ -29,6 +29,11 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private Set<Booking> bookings;
 
+    @ElementCollection (fetch = FetchType.EAGER)
+    @CollectionTable(name = "customer_contact_number", joinColumns = @JoinColumn(name = "customer_id"))
+    @Column(name = "mobile_number", nullable = false)
+    private Set<Integer> phoneNumbers;
+
     // getters, setters and toString
 
     public int getCustomerId() {
@@ -87,6 +92,14 @@ public class Customer {
         this.bookings = bookings;
     }
 
+    public Set<Integer> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(Set<Integer> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -96,6 +109,7 @@ public class Customer {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
+                ", phoneNumbers=" + phoneNumbers +
                 '}';
     }
 }

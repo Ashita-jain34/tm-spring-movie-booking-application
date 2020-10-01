@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +69,7 @@ public class MovieBookingApplication {
 		customer1.setUsername("emmastone123");
 		customer1.setPassword("imemma");
 		customer1.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
+		customer1.setPhoneNumbers(new HashSet<>(Arrays.asList(1234567890, 1234554321)));
 		customer1 = customerDao.save(customer1);
 
 		Customer customer2 = new Customer();
@@ -75,6 +78,7 @@ public class MovieBookingApplication {
 		customer2.setUsername("hammer_man");
 		customer2.setPassword("thor");
 		customer2.setDateOfBirth(LocalDateTime.of(1983, 8, 11, 0, 0));
+		customer1.setPhoneNumbers(new HashSet<>(Arrays.asList(1234567890, 1234554321)));
 		customer2 = customerDao.save(customer2);
 
 		customerDao.findAll().forEach(System.out::println);
