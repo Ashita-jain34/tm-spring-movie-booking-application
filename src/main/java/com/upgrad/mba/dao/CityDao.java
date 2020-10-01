@@ -1,10 +1,7 @@
 package com.upgrad.mba.dao;
 
 import com.upgrad.mba.entities.City;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CityDao {
-    public City save(City city);
-    public City findById(int id);
-    public City update(City city);
-    public void delete(City city);
+public interface CityDao extends JpaRepository<City, Integer> {
 }

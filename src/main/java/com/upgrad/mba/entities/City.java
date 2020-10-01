@@ -12,7 +12,7 @@ public class City {
     @Column(length = 20, nullable = false)
     private String cityName;
 
-    @OneToMany (mappedBy = "city")
+    @OneToMany (mappedBy = "city", fetch = FetchType.EAGER)
     private Set<Theatre> theatres;
 
     public int getCityId() {
@@ -44,7 +44,7 @@ public class City {
         return "City{" +
                 "cityId=" + cityId +
                 ", cityName='" + cityName + '\'' +
-                ", theatres=" + theatres +
+                //", theatres=" + theatres +
                 '}';
     }
 }
