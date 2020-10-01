@@ -1,13 +1,7 @@
 package com.upgrad.mba;
 
-import com.upgrad.mba.dao.CityDao;
-import com.upgrad.mba.dao.CustomerDao;
-import com.upgrad.mba.dao.MovieDao;
-import com.upgrad.mba.dao.TheatreDao;
-import com.upgrad.mba.entities.City;
-import com.upgrad.mba.entities.Customer;
-import com.upgrad.mba.entities.Movie;
-import com.upgrad.mba.entities.Theatre;
+import com.upgrad.mba.dao.*;
+import com.upgrad.mba.entities.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +20,8 @@ public class MovieBookingApplication {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
 		TheatreDao theatreDao = context.getBean(TheatreDao.class);
 		CityDao cityDao = context.getBean(CityDao.class);
+		BookingDao bookingDao = context.getBean(BookingDao.class);
+		CustomerDao customerDao = context.getBean(CustomerDao.class);
 
 		City mumbai = new City();
 		mumbai.setCityName("MUMBAI");
@@ -62,6 +58,52 @@ public class MovieBookingApplication {
 		System.out.println("**************Theatres in Mumbai***********");
 		cityDao.findById(mumbai.getCityId())
 				.ifPresent(city -> city.getTheatres().forEach(System.out::println));
+
+		Customer customer1 = new Customer();
+		customer1.setFirstName("Emma");
+		customer1.setLastName("Stone");
+		customer1.setUsername("emmastone123");
+		customer1.setPassword("imemma");
+		customer1.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
+		customer1 = customerDao.save(customer1);
+
+		Customer customer2 = new Customer();
+		customer2.setFirstName("Chris");
+		customer2.setLastName("Hemsworth");
+		customer2.setUsername("hammer_man");
+		customer2.setPassword("thor");
+		customer2.setDateOfBirth(LocalDateTime.of(1983, 8, 11, 0, 0));
+		customer2 = customerDao.save(customer2);
+
+		customerDao.findAll().forEach(System.out::println);
+
+		Booking booking1 = new Booking();
+		booking1.setBookingDate(LocalDateTime.now());
+		booking1.setNoOfSeats(5);
+		booking1.setCustomer(customer1);
+		booking1 = bookingDao.save(booking1);
+
+		Booking booking2 = new Booking();
+		booking2.setBookingDate(LocalDateTime.now());
+		booking2.setNoOfSeats(2);
+		booking2.setCustomer(customer1);
+		booking2 = bookingDao.save(booking2);
+
+		Booking booking3 = new Booking();
+		booking3.setBookingDate(LocalDateTime.now());
+		booking3.setNoOfSeats(3);
+		booking3.setCustomer(customer2);
+		booking3 = bookingDao.save(booking3);
+
+		System.out.println("**************Customers***********");
+		customerDao.findAll().forEach(System.out::println);
+
+		System.out.println("**************Bookings***********");
+		bookingDao.findAll().forEach(System.out::println);
+
+		System.out.println("**************Bookings by customer1***********");
+		customerDao.findById(customer1.getCustomerId())
+				.ifPresent(customer -> customer.getBookings().forEach(System.out::println));
 	}
 
 }

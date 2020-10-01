@@ -2,6 +2,7 @@ package com.upgrad.mba.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "Customer")
@@ -24,8 +25,11 @@ public class Customer {
 
     @Column(nullable = false)
     private LocalDateTime dateOfBirth;
-    // getters, setters and toString
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Booking> bookings;
+
+    // getters, setters and toString
 
     public int getCustomerId() {
         return customerId;
@@ -73,6 +77,14 @@ public class Customer {
 
     public void setDateOfBirth(LocalDateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.upgrad.mba.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +14,10 @@ public class Booking {
 
     @Column(nullable = false)
     private int noOfSeats;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     public int getBookingId() {
         return bookingId;
@@ -42,12 +43,21 @@ public class Booking {
         this.noOfSeats = noOfSeats;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
                 "bookingId=" + bookingId +
                 ", bookingDate=" + bookingDate +
                 ", noOfSeats=" + noOfSeats +
+                ", customer=" + customer +
                 '}';
     }
 }
