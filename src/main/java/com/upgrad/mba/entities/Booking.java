@@ -19,6 +19,10 @@ public class Booking {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "movie_theatre_id", nullable = false)
+    private MovieTheatre movieTheatre;
+
     public int getBookingId() {
         return bookingId;
     }
@@ -51,6 +55,14 @@ public class Booking {
         this.customer = customer;
     }
 
+    public MovieTheatre getMovieTheatre() {
+        return movieTheatre;
+    }
+
+    public void setMovieTheatre(MovieTheatre movieTheatre) {
+        this.movieTheatre = movieTheatre;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
@@ -58,6 +70,7 @@ public class Booking {
                 ", bookingDate=" + bookingDate +
                 ", noOfSeats=" + noOfSeats +
                 ", customer=" + customer +
+                ", movieTheatre=" + movieTheatre +
                 '}';
     }
 }
