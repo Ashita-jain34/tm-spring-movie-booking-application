@@ -34,6 +34,14 @@ public class Customer {
     @Column(name = "mobile_number", nullable = false)
     private Set<Integer> phoneNumbers;
 
+    @ManyToOne
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserType userType;
+
+    @ManyToOne
+    @JoinColumn(name = "language_id", nullable = false)
+    private Language language;
+
     // getters, setters and toString
 
     public int getCustomerId() {
@@ -100,6 +108,22 @@ public class Customer {
         this.phoneNumbers = phoneNumbers;
     }
 
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -110,6 +134,8 @@ public class Customer {
                 ", password='" + password + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumbers=" + phoneNumbers +
+                ", userType=" + userType +
+                ", language=" + language +
                 '}';
     }
 }

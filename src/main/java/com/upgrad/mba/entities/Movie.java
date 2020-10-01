@@ -27,6 +27,10 @@ public class Movie {
     @Column(length = 500, nullable = false)
     private String trailerUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
+    private Status status;
+
     public int getMovieId() {
         return movieId;
     }
@@ -83,6 +87,14 @@ public class Movie {
         this.trailerUrl = trailerUrl;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -93,6 +105,7 @@ public class Movie {
                 ", duration=" + duration +
                 ", coverPhotoUrl='" + coverPhotoUrl + '\'' +
                 ", trailerUrl='" + trailerUrl + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

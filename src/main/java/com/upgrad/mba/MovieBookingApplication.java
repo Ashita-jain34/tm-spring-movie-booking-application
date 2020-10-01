@@ -26,6 +26,37 @@ public class MovieBookingApplication {
 		CustomerDao customerDao = context.getBean(CustomerDao.class);
 		MovieDao movieDao = context.getBean(MovieDao.class);
 		MovieTheatreDao movieTheatreDao = context.getBean(MovieTheatreDao.class);
+		UserTypeDao userTypeDao = context.getBean(UserTypeDao.class);
+		LanguageDao languageDao = context.getBean(LanguageDao.class);
+		StatusDao statusDao = context.getBean(StatusDao.class);
+
+		UserType admin = new UserType();
+		admin.setUserTypeName("Admin");
+		admin = userTypeDao.save(admin);
+
+		UserType user = new UserType();
+		user.setUserTypeName("User");
+		user = userTypeDao.save(user);
+
+		Language english = new Language();
+		english.setLanguageName("English");
+		english = languageDao.save(english);
+
+		Language british = new Language();
+		british.setLanguageName("British");
+		british = languageDao.save(british);
+
+		Status upcoming = new Status();
+		upcoming.setStatusName("UPCOMING");
+		upcoming = statusDao.save(upcoming);
+
+		Status ongoing = new Status();
+		ongoing.setStatusName("ONGOING");
+		ongoing = statusDao.save(ongoing);
+
+		Status deleted = new Status();
+		deleted.setStatusName("DELETED");
+		deleted = statusDao.save(deleted);
 
 		City mumbai = new City();
 		mumbai.setCityName("MUMBAI");
@@ -70,6 +101,8 @@ public class MovieBookingApplication {
 		customer1.setPassword("imemma");
 		customer1.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
 		customer1.setPhoneNumbers(new HashSet<>(Arrays.asList(1234567890, 1234554321)));
+		customer1.setUserType(user);
+		customer1.setLanguage(english);
 		customer1 = customerDao.save(customer1);
 
 		Customer customer2 = new Customer();
@@ -78,8 +111,21 @@ public class MovieBookingApplication {
 		customer2.setUsername("hammer_man");
 		customer2.setPassword("thor");
 		customer2.setDateOfBirth(LocalDateTime.of(1983, 8, 11, 0, 0));
-		customer1.setPhoneNumbers(new HashSet<>(Arrays.asList(1234567890, 1234554321)));
+		customer2.setPhoneNumbers(new HashSet<>(Arrays.asList(1234567890, 1234554321)));
+		customer2.setUserType(user);
+		customer2.setLanguage(english);
 		customer2 = customerDao.save(customer2);
+
+		Customer customer3 = new Customer();
+		customer3.setFirstName("Robert");
+		customer3.setLastName("Downey");
+		customer3.setUsername("iron_man");
+		customer3.setPassword("imironman");
+		customer3.setDateOfBirth(LocalDateTime.of(1965, 4, 4, 0, 0));
+		customer3.setUserType(admin);
+		customer3.setLanguage(english);
+		customer3.setPhoneNumbers(new HashSet<>() {{add(1234567890);}});
+		customerDao.save(customer3);
 
 		customerDao.findAll().forEach(System.out::println);
 
@@ -91,6 +137,7 @@ public class MovieBookingApplication {
 		movie1.setDuration(150);
 		movie1.setCoverPhotoUrl("cover-photo-url");
 		movie1.setTrailerUrl("trailer-url");
+		movie1.setStatus(upcoming);
 		movie1 = movieDao.save(movie1);
 
 		Movie movie2 = new Movie();
@@ -102,6 +149,7 @@ public class MovieBookingApplication {
 		movie2.setDuration(180);
 		movie2.setCoverPhotoUrl("cover-photo-url");
 		movie2.setTrailerUrl("trailer-url");
+		movie2.setStatus(ongoing);
 		movie2 = movieDao.save(movie2);
 
 		MovieTheatre movieTheatre11 = new MovieTheatre();
