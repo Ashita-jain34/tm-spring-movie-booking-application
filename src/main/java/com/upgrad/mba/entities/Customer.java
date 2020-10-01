@@ -26,7 +26,7 @@ public class Customer {
     @Column(nullable = false)
     private LocalDateTime dateOfBirth;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<Booking> bookings;
 
     @ElementCollection (fetch = FetchType.EAGER)

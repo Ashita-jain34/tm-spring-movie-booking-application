@@ -149,6 +149,14 @@ public class MovieBookingApplication {
 		System.out.println("**************Bookings by customer1***********");
 		customerDao.findById(customer1.getCustomerId())
 				.ifPresent(customer -> customer.getBookings().forEach(System.out::println));
+
+		System.out.println("**************Bookings before deleting a customer*********");
+		bookingDao.findAll().forEach(booking -> System.out.println(booking.getCustomer().getFirstName()));
+
+		customerDao.deleteById(customer1.getCustomerId());
+
+		System.out.println("**************Bookings after deleting a customer*********");
+		bookingDao.findAll().forEach(booking -> System.out.println(booking.getCustomer().getFirstName()));
 	}
 
 }
