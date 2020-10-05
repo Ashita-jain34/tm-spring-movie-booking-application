@@ -3,6 +3,7 @@ package com.upgrad.mba;
 import com.upgrad.mba.dao.*;
 import com.upgrad.mba.entities.*;
 import com.upgrad.mba.services.MovieService;
+import com.upgrad.mba.services.StatusService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -21,20 +22,20 @@ public class MovieBookingApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
-		StatusDao statusDao = context.getBean(StatusDao.class);
 		MovieService movieService = context.getBean(MovieService.class);
+		StatusService statusService = context.getBean(StatusService.class);
 
 		Status upcoming = new Status();
 		upcoming.setStatusName("UPCOMING");
-		upcoming = statusDao.save(upcoming);
+		upcoming = statusService.acceptStatusDetails(upcoming);
 
 		Status ongoing = new Status();
 		ongoing.setStatusName("ONGOING");
-		ongoing = statusDao.save(ongoing);
+		ongoing = statusService.acceptStatusDetails(ongoing);
 
 		Status deleted = new Status();
 		deleted.setStatusName("DELETED");
-		deleted = statusDao.save(deleted);
+		deleted = statusService.acceptStatusDetails(deleted);
 
 		Movie movie1 = new Movie();
 		movie1.setMovieName("Avengers: Infinity War");
