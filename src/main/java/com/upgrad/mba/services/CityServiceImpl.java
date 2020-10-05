@@ -5,6 +5,7 @@ import com.upgrad.mba.entities.City;
 import com.upgrad.mba.exceptions.CityDetailsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,18 @@ public class CityServiceImpl implements CityService {
     @Override
     public City acceptCityDetails(City city) {
         return cityDao.save(city);
+    }
+
+    @Transactional
+    @Override
+    public List<City> acceptMultipleCityDetails(List<City> cities) {
+        for (int i=0; i<cities.size(); i++) {
+            cities.set(
+                    i,
+                    acceptCityDetails(cities.get(i))
+            );
+        }
+        return cities;
     }
 
     @Override

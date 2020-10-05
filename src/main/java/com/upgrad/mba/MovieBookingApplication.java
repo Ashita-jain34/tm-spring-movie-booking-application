@@ -43,28 +43,29 @@ public class MovieBookingApplication {
 
 		City mumbai = new City();
 		mumbai.setCityName("MUMBAI");
-		mumbai = cityService.acceptCityDetails(mumbai);
+		//mumbai = cityService.acceptCityDetails(mumbai);
 
 		City delhi = new City();
 		delhi.setCityName("DELHI");
-		delhi = cityService.acceptCityDetails(delhi);
+		//delhi = cityService.acceptCityDetails(delhi);
+		List<City> savedCities = cityService.acceptMultipleCityDetails(Arrays.asList(mumbai, delhi));
 
 		Theatre theatre1 = new Theatre();
 		theatre1.setTheatreName("Urvashi Cinema");
 		theatre1.setTicketPrice(500);
-		theatre1.setCity(mumbai);
+		theatre1.setCity(savedCities.get(0));
 		theatre1 = theatreService.acceptTheatreDetails(theatre1);
 
 		Theatre theatre2 = new Theatre();
 		theatre2.setTheatreName("Cinepolis Multiplex");
 		theatre2.setTicketPrice(600);
-		theatre2.setCity(mumbai);
+		theatre2.setCity(savedCities.get(0));
 		theatre2 = theatreService.acceptTheatreDetails(theatre2);
 
 		Theatre theatre3 = new Theatre();
 		theatre3.setTheatreName("PVR IMAX");
 		theatre3.setTicketPrice(700);
-		theatre3.setCity(delhi);
+		theatre3.setCity(savedCities.get(1));
 		theatre3 = theatreService.acceptTheatreDetails(theatre3);
 
 		Movie movie1 = new Movie();
