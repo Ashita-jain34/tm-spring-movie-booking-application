@@ -2,8 +2,10 @@ package com.upgrad.mba;
 
 import com.upgrad.mba.dao.*;
 import com.upgrad.mba.entities.*;
+import com.upgrad.mba.services.CityService;
 import com.upgrad.mba.services.MovieService;
 import com.upgrad.mba.services.StatusService;
+import com.upgrad.mba.services.TheatreService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +26,8 @@ public class MovieBookingApplication {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
 		MovieService movieService = context.getBean(MovieService.class);
 		StatusService statusService = context.getBean(StatusService.class);
+		CityService cityService = context.getBean(CityService.class);
+		TheatreService theatreService = context.getBean(TheatreService.class);
 
 		Status upcoming = new Status();
 		upcoming.setStatusName("UPCOMING");
@@ -36,6 +40,32 @@ public class MovieBookingApplication {
 		Status deleted = new Status();
 		deleted.setStatusName("DELETED");
 		deleted = statusService.acceptStatusDetails(deleted);
+
+		City mumbai = new City();
+		mumbai.setCityName("MUMBAI");
+		mumbai = cityService.acceptCityDetails(mumbai);
+
+		City delhi = new City();
+		delhi.setCityName("DELHI");
+		delhi = cityService.acceptCityDetails(delhi);
+
+		Theatre theatre1 = new Theatre();
+		theatre1.setTheatreName("Urvashi Cinema");
+		theatre1.setTicketPrice(500);
+		theatre1.setCity(mumbai);
+		theatre1 = theatreService.acceptTheatreDetails(theatre1);
+
+		Theatre theatre2 = new Theatre();
+		theatre2.setTheatreName("Cinepolis Multiplex");
+		theatre2.setTicketPrice(600);
+		theatre2.setCity(mumbai);
+		theatre2 = theatreService.acceptTheatreDetails(theatre2);
+
+		Theatre theatre3 = new Theatre();
+		theatre3.setTheatreName("PVR IMAX");
+		theatre3.setTicketPrice(700);
+		theatre3.setCity(delhi);
+		theatre3 = theatreService.acceptTheatreDetails(theatre3);
 
 		Movie movie1 = new Movie();
 		movie1.setMovieName("Avengers: Infinity War");
@@ -61,6 +91,8 @@ public class MovieBookingApplication {
 		movie2 = movieService.acceptMovieDetails(movie2);
 
 		movieService.getAllMoviesDetails().forEach(System.out::println);
+
+		theatreService.getAllTheatreDetails().forEach(System.out::println);
 	}
 
 }
