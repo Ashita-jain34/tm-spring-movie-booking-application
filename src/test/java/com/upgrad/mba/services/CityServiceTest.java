@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @SpringBootTest
 public class CityServiceTest {
+
     @Mock
     private CityDao cityDao;
 

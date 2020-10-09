@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Cacheable
@@ -15,6 +16,17 @@ public class Language {
 
     @Column(length = 20, nullable = false, unique = true)
     private String languageName;
+
+    public Language() {}
+
+    public Language(String languageName) {
+        this.languageName = languageName;
+    }
+
+    public Language(int languageId, String languageName) {
+        this.languageId = languageId;
+        this.languageName = languageName;
+    }
 
     public int getLanguageId() {
         return languageId;
@@ -38,5 +50,19 @@ public class Language {
                 "languageId=" + languageId +
                 ", languageName='" + languageName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Language language = (Language) o;
+        return languageId == language.languageId &&
+                languageName.equals(language.languageName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(languageId, languageName);
     }
 }
