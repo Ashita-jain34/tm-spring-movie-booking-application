@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Language {
     @Id
     @GeneratedValue
