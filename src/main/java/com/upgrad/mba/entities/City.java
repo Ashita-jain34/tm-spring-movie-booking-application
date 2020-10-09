@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class City {
     @Id
     @GeneratedValue
