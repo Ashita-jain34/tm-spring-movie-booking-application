@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,17 @@ public class City {
 
     @Column(length = 20, nullable = false)
     private String cityName;
+
+    public City() {}
+
+    public City(int cityId, String cityName) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+    }
+
+    public City(String cityName) {
+        this.cityName = cityName;
+    }
 
     @OneToMany (mappedBy = "city", fetch = FetchType.EAGER)
     private Set<Theatre> theatres;
@@ -51,5 +63,19 @@ public class City {
                 ", cityName='" + cityName + '\'' +
                 //", theatres=" + theatres +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        City city = (City) o;
+        return cityId == city.cityId &&
+                cityName.equals(city.cityName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cityId, cityName);
     }
 }
