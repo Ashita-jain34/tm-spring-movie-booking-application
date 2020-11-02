@@ -6,7 +6,10 @@ import com.upgrad.mba.exceptions.MovieDetailsNotFoundException;
 import com.upgrad.mba.services.MovieService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,5 +30,12 @@ public class MovieController {
         Movie responseMovie = movieService.getMovieDetails(9);
         MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
         return(responseMovieDTO);
+    }
+
+    @GetMapping(value = "/movies/{id}")
+    public ResponseEntity getMovieDetails(@PathVariable(name = "id") int id) throws MovieDetailsNotFoundException {
+        Movie responseMovie = movieService.getMovieDetails(id);
+        MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
+        return new ResponseEntity<>(responseMovieDTO, HttpStatus.OK);
     }
 }
