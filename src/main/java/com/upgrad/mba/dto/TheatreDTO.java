@@ -2,9 +2,9 @@ package com.upgrad.mba.dto;
 
 public class TheatreDTO {
 
-        private int theatreId;
-        private String theatreName;
-        private float ticketPrice;
+        int theatreId;
+        String theatreName;
+        float ticketPrice;
         int cityId;
 
         public int getTheatreId() {
