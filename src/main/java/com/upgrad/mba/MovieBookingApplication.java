@@ -1,35 +1,19 @@
 package com.upgrad.mba;
 
-import com.upgrad.mba.dao.*;
 import com.upgrad.mba.entities.*;
 import com.upgrad.mba.exceptions.*;
 import com.upgrad.mba.services.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class MovieBookingApplication {
 
-	@Bean
-	CommandLineRunner init (InitService initService){
-		return args -> {
-			initService.init();
-		};
-	}
-	public static void main(String[] args) throws CityDetailsNotFoundException, CustomerUserNameExistsException, UserTypeDetailsNotFoundException, CustomerDetailsNotFoundException, MovieTheatreDetailsNotFoundException {
+	public static void main(String[] args) throws CityDetailsNotFoundException, CustomerUserNameExistsException, UserTypeDetailsNotFoundException, CustomerDetailsNotFoundException, MovieTheatreDetailsNotFoundException, TheatreDetailsNotFoundException, MovieDetailsNotFoundException {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
 		MovieService movieService = context.getBean(MovieService.class);
 		StatusService statusService = context.getBean(StatusService.class);
@@ -37,6 +21,9 @@ public class MovieBookingApplication {
 		TheatreService theatreService = context.getBean(TheatreService.class);
 		CustomerService customerService = context.getBean(CustomerService.class);
 		BookingService bookingService = context.getBean(BookingService.class);
+		UserTypeService userTypeService = context.getBean(UserTypeService.class);
+		LanguageService languageService = context.getBean(LanguageService.class);
+		MovieTheatreService movieTheatreService = context.getBean(MovieTheatreService.class);
 
 		Status upcoming = new Status();
 		upcoming.setStatusName("UPCOMING");
@@ -59,41 +46,41 @@ public class MovieBookingApplication {
 			System.out.println("Exception occurred.");
 		}
 
-//		Customer customer = new Customer();
-//		customer.setFirstName("Emma");
-//		customer.setLastName("Stone");
-//		customer.setUsername("emma123stone");
-//		customer.setPassword("emma@amme");
-//		customer.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
-//		customerService.acceptCustomerDetails(customer);
+		UserType userType1= new UserType("Customer");
+		userTypeService.acceptUserTypeDetails(userType1);
 
-//		Theatre theatre1 = new Theatre();
-//		theatre1.setTheatreName("Urvashi Cinema");
-//		theatre1.setTicketPrice(500);
-//		theatre1.setCity(cityService.getCityDetails(0));
-//		theatre1 = theatreService.acceptTheatreDetails(theatre1);
-//
-//		Booking booking = new Booking();
-//		booking.setBookingDate(LocalDateTime.of(2019, 1, 8, 0, 10));
-//		booking.setCustomer(customer);
-//		booking.setNoOfSeats(150);
-//		bookingService.acceptBookingDetails(booking);
-//
-//
-//		Theatre theatre2 = new Theatre();
-//		theatre2.setTheatreName("Cinepolis Multiplex");
-//		theatre2.setTicketPrice(600);
-//		theatre2.setCity(cityService.getCityDetails(0));
-//		theatre2 = theatreService.acceptTheatreDetails(theatre2);
-//
-//		Theatre theatre3 = new Theatre();
-//		theatre3.setTheatreName("PVR IMAX");
-//		theatre3.setTicketPrice(700);
-//		theatre3.setCity(cityService.getCityDetails(1));
-//		theatre3 = theatreService.acceptTheatreDetails(theatre3);
+		Language language1= new Language("English");
+		languageService.acceptLanguageDetails(language1);
+
+		Customer customer = new Customer();
+		customer.setFirstName("Emma");
+		customer.setLastName("Stone");
+		customer.setUsername("emma123stone");
+		customer.setPassword("emma@amme");
+		customer.setDateOfBirth(LocalDateTime.of(1988, 11, 6, 0, 0));
+		customer.setUserType(userType1);
+		customer.setLanguage(language1);
+		customerService.acceptCustomerDetails(customer);
+
 		City city1= new City();
 		city1.setCityName("Mumbai");
 		cityService.acceptCityDetails(city1);
+
+		City city2= new City();
+		city2.setCityName("Delhi");
+		cityService.acceptCityDetails(city2);
+
+		Theatre theatre1 = new Theatre();
+		theatre1.setTheatreName("Urvashi Cinema");
+		theatre1.setTicketPrice(500);
+		theatre1.setCity(cityService.getCityDetails(city1.getCityId()));
+		theatre1 = theatreService.acceptTheatreDetails(theatre1);
+
+		Theatre theatre2 = new Theatre();
+		theatre2.setTheatreName("Cinepolis Multiplex");
+		theatre2.setTicketPrice(600);
+		theatre2.setCity(cityService.getCityDetails(city2.getCityId()));
+		theatre2 = theatreService.acceptTheatreDetails(theatre2);
 
 		Movie movie1 = new Movie();
 		movie1.setMovieName("Avengers: Infinity War");
@@ -118,9 +105,17 @@ public class MovieBookingApplication {
 		movie2.setStatus(ongoing);
 		movie2 = movieService.acceptMovieDetails(movie2);
 
-		movieService.getAllMoviesDetails().forEach(System.out::println);
+		MovieTheatre movieTheatre1 = new MovieTheatre();
+		movieTheatre1.setMovie(movie1);
+		movieTheatre1.setTheatre(theatre2);
+		movieTheatreService.acceptMovieTheatreDetails(movieTheatre1);
 
-		theatreService.getAllTheatreDetails().forEach(System.out::println);
+		Booking booking = new Booking();
+		booking.setBookingDate(LocalDateTime.of(2019, 1, 8, 0, 10));
+		booking.setCustomer(customer);
+		booking.setNoOfSeats(150);
+		booking.setMovieTheatre(movieTheatre1);
+		bookingService.acceptBookingDetails(booking);
 	}
 
 	@Bean
