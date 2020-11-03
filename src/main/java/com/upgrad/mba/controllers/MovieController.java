@@ -7,11 +7,15 @@ import com.upgrad.mba.services.MovieService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/movie_app/v1")
@@ -27,17 +31,21 @@ public class MovieController {
         return "Hello World To All From MovieController";
     }
 
-    @GetMapping(value= {"/movie/9"})
-    public MovieDTO getMovieDetailsofId() throws MovieDetailsNotFoundException {
-        Movie responseMovie = movieService.getMovieDetails(9);
-        MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
-        return(responseMovieDTO);
-    }
-
     @GetMapping(value = "/movies/{id}")
     public ResponseEntity getMovieDetails(@PathVariable(name = "id") int id) throws MovieDetailsNotFoundException {
         Movie responseMovie = movieService.getMovieDetails(id);
         MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
         return new ResponseEntity<>(responseMovieDTO, HttpStatus.OK);
     }
+    
+    @GetMapping(value="/movies",produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllMovies() {
+        List<Movie> movieList = movieService.getAllMoviesDetails();
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for(Movie movie : movieList){
+            movieDTOList.add(modelmapper.map(movie,MovieDTO.class));
+        }
+        return new ResponseEntity<>(movieDTOList, HttpStatus.OK);
+    }
+
 }
