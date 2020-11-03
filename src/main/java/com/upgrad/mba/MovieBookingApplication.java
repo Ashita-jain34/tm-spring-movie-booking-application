@@ -23,12 +23,6 @@ import java.util.Optional;
 @SpringBootApplication
 public class MovieBookingApplication {
 
-	@Bean
-	CommandLineRunner init (InitService initService){
-		return args -> {
-			initService.init();
-		};
-	}
 	public static void main(String[] args) throws CityDetailsNotFoundException, CustomerUserNameExistsException, UserTypeDetailsNotFoundException, CustomerDetailsNotFoundException, MovieTheatreDetailsNotFoundException {
 		ApplicationContext context = SpringApplication.run(MovieBookingApplication.class, args);
 		MovieService movieService = context.getBean(MovieService.class);
