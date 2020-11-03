@@ -52,4 +52,12 @@ public class MovieController {
         MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
         return new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
     }
+
+    @PutMapping(value="/movies/{id}",consumes= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateMovieDetails(@PathVariable(name = "id") int id, @RequestBody MovieDTO movieDTO) throws MovieDetailsNotFoundException {
+        Movie newMovie = modelmapper.map(movieDTO, Movie.class);
+        Movie updatedMovie = movieService.updateMovieDetails(id, newMovie);
+        MovieDTO updatedMovieDTO = modelmapper.map(updatedMovie, MovieDTO.class);
+        return new ResponseEntity<>(updatedMovieDTO,HttpStatus.OK);
+    }
 }
