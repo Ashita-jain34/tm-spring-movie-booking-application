@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,4 +45,11 @@ public class MovieController {
         return new ResponseEntity<>(movieDTOList, HttpStatus.OK);
     }
 
+    @PostMapping(value="/movies", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity newMovie(@RequestBody MovieDTO movieDTO) {
+        Movie newMovie = modelmapper.map(movieDTO, Movie.class);
+        Movie savedMovie = movieService.acceptMovieDetails(newMovie);
+        MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
+        return new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
+    }
 }
