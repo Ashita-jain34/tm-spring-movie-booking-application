@@ -37,7 +37,7 @@ public class MovieController {
         MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
         return new ResponseEntity<>(responseMovieDTO, HttpStatus.OK);
     }
-    
+
     @GetMapping(value="/movies",produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllMovies() {
         List<Movie> movieList = movieService.getAllMoviesDetails();
