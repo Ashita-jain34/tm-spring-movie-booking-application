@@ -91,6 +91,9 @@ public class MovieBookingApplication {
 //		theatre3.setTicketPrice(700);
 //		theatre3.setCity(cityService.getCityDetails(1));
 //		theatre3 = theatreService.acceptTheatreDetails(theatre3);
+		City city1= new City();
+		city1.setCityName("Mumbai");
+		cityService.acceptCityDetails(city1);
 
 		Movie movie1 = new Movie();
 		movie1.setMovieName("Avengers: Infinity War");

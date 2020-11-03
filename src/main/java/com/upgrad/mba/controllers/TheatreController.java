@@ -27,6 +27,7 @@ public class TheatreController {
         return new ResponseEntity<>(responseTheatreDTO, HttpStatus.OK);
     }
 
+
     @PostMapping(value="/theatres",consumes= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity newTheatre(@RequestBody TheatreDTO theatreDTO) {
         Theatre newTheatre = modelmapper.map(theatreDTO, Theatre.class);
