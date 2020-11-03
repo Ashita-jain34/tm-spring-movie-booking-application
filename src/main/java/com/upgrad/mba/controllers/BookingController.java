@@ -7,11 +7,14 @@ import com.upgrad.mba.services.BookingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/movie_app/v1")
@@ -27,5 +30,11 @@ public class BookingController {
         Booking responseBooking = bookingService.getBookingDetails(id);
         BookingDTO responseBookingDTO = modelmapper.map(responseBooking,BookingDTO.class);
         return new ResponseEntity<>(responseBookingDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/bookings",produces= MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
+    public ResponseEntity findAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookingDetails();
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 }
