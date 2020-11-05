@@ -27,7 +27,7 @@ public class BookingServiceImpl implements BookingService {
         movieTheatreService.getMovieTheatreDetails(booking.getMovieTheatre().getMovieTheatreId());
         customerService.getCustomerDetails(booking.getCustomer().getCustomerId());
         bookingDao.save(booking);
-        return null;
+        return booking;
     }
 
     @Override
