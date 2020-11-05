@@ -50,7 +50,6 @@ public class BookingController {
         Booking newBooking = dtoEntityConverter.convertToBookingEntity(bookingDTO);
         Booking savedBooking = bookingService.acceptBookingDetails(newBooking);
         BookingDTO savedBookingDTO = entityDTOConverter.convertToBookingDTO(savedBooking);
-//        savedBookingDTO.setMovieTheatreId(savedBooking.getMovieTheatre().getMovieTheatreId());
         return new ResponseEntity<>(savedBookingDTO, HttpStatus.CREATED);
     }
 
