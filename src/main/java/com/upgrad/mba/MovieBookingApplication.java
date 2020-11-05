@@ -120,9 +120,7 @@ public class MovieBookingApplication {
 		booking.setNoOfSeats(150);
 		booking.setMovieTheatre(movieTheatre1);
 		bookingService.acceptBookingDetails(booking);
-		Set<Booking> bookingSet = new HashSet<Booking>();
-		bookingSet.add(booking);
-		customer.setBookings(bookingSet);
+
 	}
 
 	@Bean

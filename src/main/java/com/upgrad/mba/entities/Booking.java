@@ -1,5 +1,7 @@
 package com.upgrad.mba.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,6 +18,7 @@ public class Booking {
     private int noOfSeats;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 

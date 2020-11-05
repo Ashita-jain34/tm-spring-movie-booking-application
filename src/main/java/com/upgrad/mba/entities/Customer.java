@@ -1,5 +1,7 @@
 package com.upgrad.mba.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class Customer {
     private LocalDateTime dateOfBirth;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JsonBackReference
     private Set<Booking> bookings;
 
     @ElementCollection (fetch = FetchType.EAGER)
