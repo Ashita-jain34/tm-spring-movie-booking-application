@@ -7,6 +7,7 @@ public class BookingDTO {
     private LocalDateTime bookingDate;
     private int noOfSeats;
     int customerId;
+    int movieTheatreId;
 
     public int getBookingId() {
         return bookingId;
@@ -40,5 +41,11 @@ public class BookingDTO {
         this.customerId = customerId;
     }
 
+    public int getMovieTheatreId() {
+        return movieTheatreId;
+    }
 
+    public void setMovieTheatreId(int movieTheatreId) {
+        this.movieTheatreId = movieTheatreId;
+    }
 }
