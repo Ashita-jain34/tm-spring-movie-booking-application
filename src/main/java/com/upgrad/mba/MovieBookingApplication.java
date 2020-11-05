@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 public class MovieBookingApplication {
@@ -117,6 +119,9 @@ public class MovieBookingApplication {
 		booking.setNoOfSeats(150);
 		booking.setMovieTheatre(movieTheatre1);
 		bookingService.acceptBookingDetails(booking);
+		Set<Booking> bookingSet = new HashSet<Booking>();
+		bookingSet.add(booking);
+		customer.setBookings(bookingSet);
 	}
 
 	@Bean
