@@ -5,6 +5,8 @@ import com.upgrad.mba.entities.Movie;
 import com.upgrad.mba.exceptions.MovieDetailsNotFoundException;
 import com.upgrad.mba.services.MovieService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,8 +25,11 @@ public class MovieController {
     @Autowired
     ModelMapper modelmapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+
     @GetMapping(value= {"/sayHelloMovie"})
     public String sayHello(){
+        logger.info("Hello from the MovieController");
         return "Hello World To All From MovieController";
     }
 
@@ -32,6 +37,7 @@ public class MovieController {
     public ResponseEntity getMovieDetails(@PathVariable(name = "id") int id) throws MovieDetailsNotFoundException {
         Movie responseMovie = movieService.getMovieDetails(id);
         MovieDTO responseMovieDTO = modelmapper.map(responseMovie,MovieDTO.class);
+        logger.debug("Get movie details :" + responseMovieDTO);
         return new ResponseEntity<>(responseMovieDTO, HttpStatus.OK);
     }
 
@@ -42,6 +48,7 @@ public class MovieController {
         for(Movie movie : movieList){
             movieDTOList.add(modelmapper.map(movie,MovieDTO.class));
         }
+        logger.debug("Returning all movies" , movieDTOList);
         return new ResponseEntity<>(movieDTOList, HttpStatus.OK);
     }
 
@@ -50,11 +57,13 @@ public class MovieController {
         Movie newMovie = modelmapper.map(movieDTO, Movie.class);
         Movie savedMovie = movieService.acceptMovieDetails(newMovie);
         MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
+        logger.debug("Accepted new movie details",savedMovieDTO);
         return new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
     }
 
     @PutMapping(value="/movies/{id}",consumes= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateMovieDetails(@PathVariable(name = "id") int id, @RequestBody MovieDTO movieDTO) throws MovieDetailsNotFoundException {
+        logger.debug("Update movie details : movie id :" + id, movieDTO);
         Movie newMovie = modelmapper.map(movieDTO, Movie.class);
         Movie updatedMovie = movieService.updateMovieDetails(id, newMovie);
         MovieDTO updatedMovieDTO = modelmapper.map(updatedMovie, MovieDTO.class);
