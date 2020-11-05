@@ -17,6 +17,9 @@ public class UserType {
     @Column(length = 20, unique = true)
     private String userTypeName = "User";
 
+    public UserType() {
+    }
+
     public UserType(String userTypeName) {
         this.userTypeName = userTypeName;
     }
