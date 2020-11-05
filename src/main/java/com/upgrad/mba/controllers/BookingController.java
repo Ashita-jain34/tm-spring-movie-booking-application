@@ -53,4 +53,10 @@ public class BookingController {
         savedBookingDTO.setMovieTheatreId(savedBooking.getMovieTheatre().getMovieTheatreId());
         return new ResponseEntity<>(savedBookingDTO, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/bookings/{id}")
+    public ResponseEntity<String> removeBookingDetails(@PathVariable("id") int id) throws BookingDetailsNotFoundException{
+        bookingService.deleteBooking(id);
+        return new ResponseEntity<>("Booking details successfully removed ",HttpStatus.OK);
+    }
 }
