@@ -2,8 +2,11 @@ package com.upgrad.mba.controllers;
 
 import com.upgrad.mba.dto.MovieDTO;
 import com.upgrad.mba.entities.Movie;
+import com.upgrad.mba.exceptions.APIException;
 import com.upgrad.mba.exceptions.MovieDetailsNotFoundException;
+import com.upgrad.mba.exceptions.StatusDetailsNotFoundException;
 import com.upgrad.mba.services.MovieService;
+import com.upgrad.mba.validator.MovieValidator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +25,9 @@ import java.util.List;
 public class MovieController {
     @Autowired
     MovieService movieService;
+
+    @Autowired
+    MovieValidator movieValidator;
 
     @Autowired
     ModelMapper modelmapper;
@@ -41,7 +48,7 @@ public class MovieController {
         return new ResponseEntity<>(responseMovieDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value="/movies",produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/movies",produces= MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
     public ResponseEntity getAllMovies() {
         List<Movie> movieList = movieService.getAllMoviesDetails();
         List<MovieDTO> movieDTOList = new ArrayList<>();
@@ -52,8 +59,9 @@ public class MovieController {
         return new ResponseEntity<>(movieDTOList, HttpStatus.OK);
     }
 
-    @PostMapping(value="/movies", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity newMovie(@RequestBody MovieDTO movieDTO) {
+    @PostMapping(value="/movies", consumes = MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
+    public ResponseEntity newMovie(@RequestBody MovieDTO movieDTO) throws APIException, ParseException, StatusDetailsNotFoundException {
+        movieValidator.validateMovie(movieDTO);
         Movie newMovie = modelmapper.map(movieDTO, Movie.class);
         Movie savedMovie = movieService.acceptMovieDetails(newMovie);
         MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
@@ -61,9 +69,10 @@ public class MovieController {
         return new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
     }
 
-    @PutMapping(value="/movies/{id}",consumes= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateMovieDetails(@PathVariable(name = "id") int id, @RequestBody MovieDTO movieDTO) throws MovieDetailsNotFoundException {
+    @PutMapping(value="/movies/{id}",consumes= MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
+    public ResponseEntity updateMovieDetails(@PathVariable(name = "id") int id, @RequestBody MovieDTO movieDTO) throws MovieDetailsNotFoundException, APIException, ParseException, StatusDetailsNotFoundException {
         logger.debug("Update movie details : movie id :" + id, movieDTO);
+        movieValidator.validateMovie(movieDTO);
         Movie newMovie = modelmapper.map(movieDTO, Movie.class);
         Movie updatedMovie = movieService.updateMovieDetails(id, newMovie);
         MovieDTO updatedMovieDTO = modelmapper.map(updatedMovie, MovieDTO.class);
