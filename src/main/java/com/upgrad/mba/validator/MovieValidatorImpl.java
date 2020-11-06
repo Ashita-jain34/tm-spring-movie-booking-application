@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Service
 public class MovieValidatorImpl implements MovieValidator {
@@ -17,11 +17,7 @@ public class MovieValidatorImpl implements MovieValidator {
     StatusService statusService;
 
     public void validateMovie(MovieDTO movieDTO) throws APIException, ParseException, StatusDetailsNotFoundException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = sdf.format(new Date());
-        Date todaysDate = sdf.parse(dateString);
-        String formatMovieDate = sdf.format(movieDTO.getReleaseDate());
-        Date parsedMovieDate = sdf.parse(formatMovieDate);
+
         if(movieDTO.getMovieName() == null || movieDTO.getMovieName().length() <= 0)
             throw new APIException("Invalid movie name");
         if(movieDTO.getCoverPhotoUrl() == null || movieDTO.getCoverPhotoUrl().length() <=0)
@@ -32,15 +28,15 @@ public class MovieValidatorImpl implements MovieValidator {
             throw new APIException("Invalid  description");
         if(movieDTO.getDuration() <= 25 || movieDTO.getDuration() > 240)
             throw new APIException("Invalid duration");
-       if(movieDTO.getStatusId() <= 0)
+        if(movieDTO.getStatusId() <= 0)
             throw new APIException("Invalid status");
         if(statusService.getStatusDetails(movieDTO.getStatusId()).getStatusName().equalsIgnoreCase("Upcoming")){
-            if(parsedMovieDate.compareTo(todaysDate) <0 ){
+            if(movieDTO.getReleaseDate().compareTo(LocalDateTime.now()) <0 ){
                 throw new APIException("Invalid movie release date");
             }
         }
         if(statusService.getStatusDetails(movieDTO.getStatusId()).getStatusName().equalsIgnoreCase("Released")){
-            if(parsedMovieDate.compareTo(todaysDate) >0 ){
+            if(movieDTO.getReleaseDate().compareTo(LocalDateTime.now())>0){
                 throw new APIException("Invalid movie release date");
             }
         }
