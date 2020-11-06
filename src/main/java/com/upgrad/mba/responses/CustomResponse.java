@@ -28,5 +28,5 @@ public class CustomResponse {
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
-    
+
 }
