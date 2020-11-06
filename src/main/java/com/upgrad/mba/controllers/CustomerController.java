@@ -4,6 +4,7 @@ import com.upgrad.mba.dto.CustomerDTO;
 import com.upgrad.mba.entities.Customer;
 import com.upgrad.mba.exceptions.*;
 import com.upgrad.mba.services.CustomerService;
+import com.upgrad.mba.validator.CustomerValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,14 @@ public class CustomerController {
     CustomerService customerService;
 
     @Autowired
+    CustomerValidator customerValidator;
+
+    @Autowired
     ModelMapper modelmapper;
 
     @PutMapping(value="/customers/{id}",consumes= MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateCustomerDetails(@PathVariable(name = "id") int id , @RequestBody CustomerDTO customerDTO) throws CustomerUserNameExistsException, CustomerDetailsNotFoundException, UserTypeDetailsNotFoundException, TheatreDetailsNotFoundException, BookingDetailsNotFoundException {
+    public ResponseEntity updateCustomerDetails(@PathVariable(name = "id") int id , @RequestBody CustomerDTO customerDTO) throws CustomerUserNameExistsException, CustomerDetailsNotFoundException, UserTypeDetailsNotFoundException, TheatreDetailsNotFoundException, BookingDetailsNotFoundException, APIException {
+        customerValidator.validateCustomer(customerDTO);
         Customer newCustomer = modelmapper.map(customerDTO,Customer.class);
         Customer updatedCustomer =  customerService.updateCustomerDetails(id, newCustomer);
         CustomerDTO updatedCustomerDTO = modelmapper.map(updatedCustomer, CustomerDTO.class);
