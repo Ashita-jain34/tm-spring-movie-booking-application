@@ -7,11 +7,11 @@ public class CustomResponse {
 
     public CustomResponse(){
     }
+
     public CustomResponse(String errorMessage, int statusCode) {
         this.errorMessage = errorMessage;
         this.statusCode = statusCode;
     }
-
 
     public String getErrorMessage() {
         return errorMessage;
@@ -28,7 +28,5 @@ public class CustomResponse {
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
-
-
-
+    
 }

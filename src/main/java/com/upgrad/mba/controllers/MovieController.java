@@ -61,12 +61,19 @@ public class MovieController {
 
     @PostMapping(value="/movies", consumes = MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
     public ResponseEntity newMovie(@RequestBody MovieDTO movieDTO) throws APIException, ParseException, StatusDetailsNotFoundException {
-        movieValidator.validateMovie(movieDTO);
-        Movie newMovie = modelmapper.map(movieDTO, Movie.class);
-        Movie savedMovie = movieService.acceptMovieDetails(newMovie);
-        MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
-        logger.debug("Accepted new movie details",savedMovieDTO);
-        return new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
+        ResponseEntity responseEntity = null;
+        try {
+            movieValidator.validateMovie(movieDTO);
+            Movie newMovie = modelmapper.map(movieDTO, Movie.class);
+            Movie savedMovie = movieService.acceptMovieDetails(newMovie);
+            MovieDTO savedMovieDTO = modelmapper.map(savedMovie,MovieDTO.class);
+            responseEntity = new ResponseEntity<>(savedMovieDTO,HttpStatus.CREATED);
+            logger.debug("Accept new movie details",responseEntity);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("Exception:" , e);
+        }
+        return responseEntity;
     }
 
     @PutMapping(value="/movies/{id}",consumes= MediaType.APPLICATION_JSON_VALUE,headers="Accept=application/json")
