@@ -11,8 +11,19 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MovieBookingApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(MovieBookingApplication.class, args);
+	}
+	@Bean
+	CommandLineRunner init (InitService initService){
+		return args -> {
+			initService.init();
+		};
+	}
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 
 	@Bean
