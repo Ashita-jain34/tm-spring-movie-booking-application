@@ -1,6 +1,7 @@
 package com.upgrad.mba.validator;
 
 import com.upgrad.mba.dto.CustomerDTO;
+import com.upgrad.mba.dto.LoginDTO;
 import com.upgrad.mba.exceptions.APIException;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,14 @@ public class CustomerValidatorImpl implements CustomerValidator{
             throw new APIException("Invalid date of birth");
         if(customerDTO.getUserTypeId() <= 0 )
             throw new APIException("Invalid user type");
+    }
+
+    public void validateUserLogin(LoginDTO user) throws APIException {
+        if (user.getUsername() == null || user.getUsername().length() <= 0) {
+            throw new APIException("Invalid username");
+        }
+        if(user.getPassword() == null || user.getPassword().length() <= 0   ) {
+            throw new APIException("Invalid password");
+        }
     }
 }

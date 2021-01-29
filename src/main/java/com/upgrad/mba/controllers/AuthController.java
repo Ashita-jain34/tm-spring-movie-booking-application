@@ -1,11 +1,9 @@
 package com.upgrad.mba.controllers;
 
 import com.upgrad.mba.dto.CustomerDTO;
+import com.upgrad.mba.dto.LoginDTO;
 import com.upgrad.mba.entities.Customer;
-import com.upgrad.mba.exceptions.APIException;
-import com.upgrad.mba.exceptions.CustomException;
-import com.upgrad.mba.exceptions.CustomerDetailsNotFoundException;
-import com.upgrad.mba.exceptions.CustomerUserNameExistsException;
+import com.upgrad.mba.exceptions.*;
 import com.upgrad.mba.services.CustomerServiceImpl;
 import com.upgrad.mba.validator.CustomerValidator;
 import org.modelmapper.ModelMapper;
@@ -63,5 +61,25 @@ public class AuthController {
             throw new CustomException("Username " + customerDTO.getUsername() + " already registered",
                     HttpStatus.UNPROCESSABLE_ENTITY);
         }
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity login(@RequestBody LoginDTO loginDTO)
+            throws APIException, CustomerDetailsNotFoundException, BadCredentialsException, CustomException {
+        customerValidator.validateUserLogin(loginDTO);
+        Map<String, String> model = new HashMap<>();
+        String username = loginDTO.getUsername();
+        String password = loginDTO.getPassword();
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            model.put("Error", "Username is invalid/ Password is empty");
+            return new ResponseEntity<>(model, HttpStatus.BAD_REQUEST);
+        }
+        Customer savedCustomer = customerService.getCustomerDetailsByUsername(username);
+        if (!savedCustomer.getPassword().equals(password)) {
+            throw new BadCredentialsException("Invalid username/password");
+        }
+        model.put("message","Logged in Successfully");
+        model.put("token",savedCustomer.getUsername());
+        return new ResponseEntity<>(model, HttpStatus.OK);
     }
 }
