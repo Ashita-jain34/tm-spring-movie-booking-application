@@ -2,7 +2,11 @@ package com.upgrad.mba.controllers;
 
 import com.upgrad.mba.dto.TheatreDTO;
 import com.upgrad.mba.entities.Theatre;
+import com.upgrad.mba.exceptions.APIException;
+import com.upgrad.mba.exceptions.BadCredentialsException;
+import com.upgrad.mba.exceptions.CustomerDetailsNotFoundException;
 import com.upgrad.mba.exceptions.TheatreDetailsNotFoundException;
+import com.upgrad.mba.services.CustomerService;
 import com.upgrad.mba.services.TheatreService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,9 @@ public class TheatreController {
     TheatreService theatreService;
 
     @Autowired
+    CustomerService customerService;
+
+    @Autowired
     ModelMapper modelmapper;
 
     @GetMapping(value = "/theatres/{id}")
@@ -29,7 +36,11 @@ public class TheatreController {
 
 
     @PostMapping(value="/theatres",consumes= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity newTheatre(@RequestBody TheatreDTO theatreDTO) {
+    public ResponseEntity newTheatre(@RequestBody TheatreDTO theatreDTO, @RequestHeader(value = "ACCESS-TOKEN") String token) throws APIException, BadCredentialsException, CustomerDetailsNotFoundException {
+        if(token == null)
+            throw new APIException("Please add proper authentication");
+        if(!customerService.getCustomerDetailsByUsername(token).getUserType().getUserTypeName().equalsIgnoreCase("Admin"))
+            throw new BadCredentialsException("This feature is only available to admin");
         Theatre newTheatre = modelmapper.map(theatreDTO, Theatre.class);
         Theatre savedTheatre = theatreService.acceptTheatreDetails(newTheatre);
         TheatreDTO savedTheatreDTO = modelmapper.map(savedTheatre, TheatreDTO.class);
